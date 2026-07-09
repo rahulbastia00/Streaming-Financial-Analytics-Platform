@@ -19,7 +19,8 @@ kafka_configuration = {
     'bootstrap.servers': KAFKA_BOOTSTRAP_SERVERS,
     'security.protocol': 'SASL_SSL',
     'sasl.mechanism': 'PLAIN',
-    'sasl.jaas.config': f'org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="{KAFKA_SASL_PASSWORD}";',
+    'sasl.username': '$ConnectionString',
+    'sasl.password': KAFKA_SASL_PASSWORD,
     'client.id': 'fabric-alpha-producer',
     'acks': 'all' 
 }
