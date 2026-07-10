@@ -28,7 +28,7 @@ def on_open(ws):
 
 
 ws = websocket.WebSocketApp(
-    f"wss://ws.finnhub.io?token={os.getenv('FINNHUB_API_KEY')}",
+    f"wss://ws.finnhub.io?token={os.getenv('FINNHUB')}",
     on_open=on_open,
     on_message=on_message,
 )
