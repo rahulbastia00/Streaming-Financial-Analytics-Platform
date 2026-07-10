@@ -4,13 +4,24 @@ from confluent_kafka import Producer
 from models import MarketAuxResponse
 
 load_dotenv()
-producer = Producer({"bootstrap.servers": os.getenv("KAFKA_BOOTSTRAP_SERVERS")})
+producer = Producer(
+    {"bootstrap.servers": os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")}
+)
 
 
 def poll():
-    url = f"https://api.marketaux.com/v1/news/all?symbols=GOOGL,MSFT,AMZN,NVDA&api_token={os.getenv('MARKETAUX')}"
+    # Added CC:BTC to capture crypto entity news explicitly
+    url = f"https://api.marketaux.com/v1/news/all?symbols=GOOGL,MSFT,AMZN,NVDA,CC:BTC&filter_entities=true&limit=10&api_token={os.getenv('MARKETAUX')}"
     try:
-        res = requests.get(url).json()
+        res = requests.get(url, timeout=10).json()
+
+        # DataOps Resilience: Ignore structural API blocks
+        if "error" in res or "message" in res:
+            print(
+                f"[-] MarketAux API Notice: {res.get('error', {}).get('message', 'Check limits')}"
+            )
+            return
+
         validated = MarketAuxResponse(**res)
         for article in validated.data:
             producer.produce(
@@ -19,11 +30,13 @@ def poll():
                 value=article.model_dump_json(),
             )
         producer.flush()
-        print(f"[MarketAux] Ingested {len(validated.data)} articles.")
+        print(f"[MarketAux] Ingested {len(validated.data)} multi-asset articles.")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"[-] MarketAux Error: {e}")
 
 
-while True:
-    poll()
-    time.sleep(300)  # Wait 5 minutes
+if __name__ == "__main__":
+    print("[*] Starting Multi-Asset MarketAux Poller...")
+    while True:
+        poll()
+        time.sleep(300)  # Poll every 5 minutes

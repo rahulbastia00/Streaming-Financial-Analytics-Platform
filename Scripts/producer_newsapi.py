@@ -4,13 +4,22 @@ from confluent_kafka import Producer
 from models import NewsAPIResponse
 
 load_dotenv()
-producer = Producer({"bootstrap.servers": os.getenv("KAFKA_BOOTSTRAP_SERVERS")})
+producer = Producer(
+    {"bootstrap.servers": os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")}
+)
 
 
 def poll():
-    url = f"https://newsapi.org/v2/everything?q=Google+OR+Microsoft+OR+Amazon+OR+Nvidia&apiKey={os.getenv('NEWSAPI')}"
+    # Expanded search query to target Forex and Crypto topics
+    url = f"https://newsapi.org/v2/everything?q=Google+OR+Microsoft+OR+Amazon+OR+Nvidia+OR+Bitcoin+OR+Forex+OR+EURUSD&language=en&apiKey={os.getenv('NEWSAPI_API_KEY')}"
     try:
-        res = requests.get(url).json()
+        res = requests.get(url, timeout=10).json()
+
+        # DataOps Resilience: Catch key issues or limitations early
+        if res.get("status") == "error":
+            print(f"[-] NewsAPI Alert: {res.get('message')}")
+            return
+
         validated = NewsAPIResponse(**res)
         for article in validated.articles:
             producer.produce(
@@ -19,11 +28,13 @@ def poll():
                 value=article.model_dump_json(),
             )
         producer.flush()
-        print(f"[NewsAPI] Ingested {len(validated.articles)} articles.")
+        print(f"[NewsAPI] Ingested {len(validated.articles)} multi-asset articles.")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"[-] NewsAPI Error: {e}")
 
 
-while True:
-    poll()
-    time.sleep(300)
+if __name__ == "__main__":
+    print("[*] Starting Multi-Asset NewsAPI Poller...")
+    while True:
+        poll()
+        time.sleep(300)  # Poll every 5 minutes

@@ -34,9 +34,13 @@ def keep_alive(ws):
 
 
 def on_open(ws):
+    print("[*] AllTick Handshake Secure. Subscribing to Crypto and Forex assets...")
+
     symbols = [
-        {"code": f"{s}.US", "depth_level": 1} for s in ["GOOGL", "MSFT", "AMZN", "NVDA"]
+        {"code": "BTCUSDT", "depth_level": 1},
+        {"code": "EURUSD", "depth_level": 1},
     ]
+
     sub_payload = {
         "cmd_id": 22002,
         "seq_id": 2,
