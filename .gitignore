@@ -1,4 +1,19 @@
-/venv
-venv
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environment
 venv/
+.venv/
+env/
+
+# Environment variables
 .env
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
