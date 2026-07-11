@@ -1,0 +1,94 @@
+[0m13:43:09.173025 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023437A65C10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002343AC7F380>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002343AAEC6B0>]}
+
+
+============================== 13:43:09.185830 | d089b624-f6da-4ad5-83b8-f5566e5e4d52 ==============================
+[0m13:43:09.185830 [info ] [MainThread]: Running with dbt=1.11.12
+[0m13:43:09.190297 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'None', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'profiles_dir': 'C:\\Users\\rahul\\.dbt', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'indirect_selection': 'eager', 'invocation_command': 'dbt init dbt_analytics', 'use_colors': 'True', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m13:43:09.214806 [info ] [MainThread]: Creating dbt configuration folder at C:\Users\rahul\.dbt
+[0m13:43:09.227152 [debug] [MainThread]: Starter project path: C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\include\starter_project
+[0m13:43:09.292619 [info ] [MainThread]: 
+Your new dbt project "dbt_analytics" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m13:43:09.295495 [info ] [MainThread]: Setting up your profile.
+[0m13:43:41.372273 [debug] [MainThread]: Snowflake adapter: Setting snowflake.connector to ERROR (file logging only)
+[0m13:43:41.373341 [debug] [MainThread]: Snowflake adapter: Setting botocore to ERROR (file logging only)
+[0m13:43:41.373890 [debug] [MainThread]: Snowflake adapter: Setting boto3 to ERROR (file logging only)
+[0m13:43:44.830258 [error] [MainThread]: Encountered an error:
+
+[0m13:43:44.837235 [error] [MainThread]: Traceback (most recent call last):
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\cli\requires.py", line 182, in wrapper
+    result, success = func(*args, **kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\cli\requires.py", line 128, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\cli\main.py", line 488, in init
+    results = task.run()
+              ^^^^^^^^^^
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\task\init.py", line 346, in run
+    self.setup_profile(profile_name)
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\task\init.py", line 262, in setup_profile
+    self.create_profile_from_target(adapter, profile_name=profile_name)
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\task\init.py", line 179, in create_profile_from_target
+    self.create_profile_from_profile_template(profile_template, profile_name)
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\task\init.py", line 163, in create_profile_from_profile_template
+    target = self.generate_target_from_input(prompts, initial_target)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\task\init.py", line 129, in generate_target_from_input
+    target[key] = click.prompt(
+                  ^^^^^^^^^^^^^
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\click\termui.py", line 218, in prompt
+    value = prompt_func(prompt)
+            ^^^^^^^^^^^^^^^^^^^
+  File "C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\click\termui.py", line 201, in prompt_func
+    raise Abort() from None
+click.exceptions.Abort
+
+[0m13:43:44.842588 [debug] [MainThread]: Command `dbt init` failed at 13:43:44.841272 after 36.06 seconds
+[0m13:43:44.845134 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002343AAEC6B0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002343D326690>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002343CD8E630>]}
+[0m13:43:44.846862 [debug] [MainThread]: Flushing usage events
+[0m13:44:03.977619 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001AC2D0F9670>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001AC2F94B020>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001AC2C7F58B0>]}
+
+
+============================== 13:44:03.981198 | ba8ffba3-36cd-4a4a-b20f-8c314a017c33 ==============================
+[0m13:44:03.981198 [info ] [MainThread]: Running with dbt=1.11.12
+[0m13:44:03.981198 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'None', 'cache_selected_only': 'False', 'fail_fast': 'False', 'debug': 'False', 'log_format': 'default', 'profiles_dir': 'C:\\Users\\rahul\\.dbt', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'indirect_selection': 'eager', 'invocation_command': 'dbt init dbt_analytics', 'use_colors': 'True', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m13:44:04.037704 [debug] [MainThread]: Starter project path: C:\projects\Data Engineer\Streaming Financial Analytics Platform\venv\Lib\site-packages\dbt\include\starter_project
+[0m13:44:04.064408 [info ] [MainThread]: 
+Your new dbt project "dbt_analytics" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m13:44:04.064408 [info ] [MainThread]: Setting up your profile.
+[0m13:44:37.954366 [debug] [MainThread]: Snowflake adapter: Setting snowflake.connector to ERROR (file logging only)
+[0m13:44:37.958142 [debug] [MainThread]: Snowflake adapter: Setting botocore to ERROR (file logging only)
+[0m13:44:37.958142 [debug] [MainThread]: Snowflake adapter: Setting boto3 to ERROR (file logging only)
+[0m13:50:28.600958 [info ] [MainThread]: Profile dbt_analytics written to C:\Users\rahul\.dbt\profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m13:50:28.611118 [debug] [MainThread]: Command `dbt init` succeeded at 13:50:28.610448 after 384.96 seconds
+[0m13:50:28.611118 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001AC2F614FB0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001AC327A1580>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001AC322B7020>]}
+[0m13:50:28.611118 [debug] [MainThread]: Flushing usage events
+[0m13:50:30.964103 [debug] [MainThread]: An error was encountered while trying to flush usage events
