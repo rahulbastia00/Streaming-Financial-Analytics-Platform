@@ -18,7 +18,7 @@ class AlphaVantageCandle(BaseModel):
 
 class AlphaVantageResponse(BaseModel):
     meta_data: Dict[str, str] = Field(..., alias="Meta Data")
-    time_series: Dict[str, AlphaVantageCandle] = Field(..., alias="Time Series (5min)")
+    time_series: Dict[str, AlphaVantageCandle] = Field(..., alias="Time Series (Daily)")
 
 # 3. NewsAPI
 class NewsSource(BaseModel):

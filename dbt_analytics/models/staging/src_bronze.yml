@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: snowflake_bronze
+    database: alpha_financial_db
+    schema: bronze
+    tables:
+      - name: bronze_finnhub_ticks
+      - name: bronze_alltick_ticks
+      - name: bronze_marketaux_news
+      - name: bronze_newsapi_news
+      - name: bronze_alphavantage_candles
