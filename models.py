@@ -43,8 +43,17 @@ class MarketAuxResponse(BaseModel):
     meta: Dict[str, Any]; data: List[MarketAuxArticle]
 
 # 5. AllTick
+class AllTickDepthItem(BaseModel):
+    price: str
+    volume: str
+
 class AllTickData(BaseModel):
-    symbol: str; price: float; bid: Optional[float]; ask: Optional[float]; volume: Optional[float]; timestamp: int
+    code: str
+    seq: int
+    tick_time: int
+    bids: List[AllTickDepthItem] = []
+    asks: List[AllTickDepthItem] = []
 
 class AllTickResponse(BaseModel):
-    code: int; msg: str; data: AllTickData
+    cmd_id: int
+    data: AllTickData

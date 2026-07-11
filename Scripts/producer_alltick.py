@@ -8,23 +8,28 @@ producer = Producer({"bootstrap.servers": os.getenv("KAFKA_BOOTSTRAP_SERVERS")})
 
 def on_message(ws, message):
     raw_json = json.loads(message)
-    # Skip standard heartbeat/ping responses from the server
-    if "cmd_id" in raw_json and raw_json["cmd_id"] == 22000:
+    
+    # DataOps Resilience Guard: ONLY process streaming quote pushes (22999)
+    # This automatically drops heartbeats (22000) and subscription receipts (22003)
+    if raw_json.get("cmd_id") != 22999:
         return
+        
     try:
         validated = AllTickResponse(**raw_json)
         producer.produce(
             topic="raw_alltick_ticks",
-            key=validated.data.symbol,
+            key=validated.data.code,
             value=validated.model_dump_json(),
         )
         producer.flush()
-        print(f"[AllTick] Sent live crypto tick for {validated.data.symbol} | Price: {validated.data.price}")
+        
+        # Grab the highest active buy order price to print cleanly
+        top_bid = validated.data.bids[0].price if validated.data.bids else "N/A"
+        print(f"[AllTick] Sent live crypto tick for {validated.data.code} | Top Bid: {top_bid}")
     except Exception as e:
         print(f"[-] AllTick Parsing Error: {e}")
 
 def keep_alive(ws):
-    """ Sends a heartbeat every 10 seconds so the server connection never drops """
     while True:
         time.sleep(10)
         if ws.sock and ws.sock.connected:
@@ -35,7 +40,6 @@ def keep_alive(ws):
 def on_open(ws):
     print("[*] AllTick Handshake Secure. Subscribing to Crypto and Forex assets...")
 
-    # Unified list capturing Bitcoin, Ethereum, and Euro/US Dollar Forex
     symbols = [
         {"code": "BTCUSDT", "depth_level": 1},
         {"code": "ETHUSDT", "depth_level": 1},
@@ -52,7 +56,6 @@ def on_open(ws):
     threading.Thread(target=keep_alive, args=(ws,), daemon=True).start()
 
 if __name__ == "__main__":
-    # Target the WebSocket endpoint using your environment variable token key
-    url = f"wss://quote.alltick.co/quote-stock-b-ws-api?token={os.getenv('ALLTICK')}"
+    url = f"wss://quote.alltick.co/quote-b-ws-api?token={os.getenv('ALLTICK')}"
     ws = websocket.WebSocketApp(url, on_open=on_open, on_message=on_message)
     ws.run_forever()

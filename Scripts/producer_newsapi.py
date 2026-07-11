@@ -2,6 +2,7 @@ import os, time, requests
 from dotenv import load_dotenv
 from confluent_kafka import Producer
 from models import NewsAPIResponse
+from datetime import datetime, timedelta
 
 load_dotenv()
 producer = Producer(
@@ -10,8 +11,9 @@ producer = Producer(
 
 
 def poll():
+    one_week_ago = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')
     # Expanded search query to target Forex and Crypto topics
-    url = f"https://newsapi.org/v2/everything?q=Google+OR+Microsoft+OR+Amazon+OR+Nvidia+OR+Bitcoin+OR+Ethereum+OR+Forex+OR+EURUSD&language=en&apiKey={os.getenv('NEWSAPI')}"
+    url = f"https://newsapi.org/v2/everything?q=Google+OR+Microsoft+OR+Amazon+OR+Nvidia+OR+Bitcoin+OR+Ethereum&from={one_week_ago}&language=en&apiKey={os.getenv('NEWSAPI')}"
     try:
         res = requests.get(url, timeout=10).json()
 

@@ -12,7 +12,7 @@ def run_weekend_backfill():
     
     for symbol in symbols:
         # Crucial Shift: Added outputsize=full to extract deep historical 5-min candles
-        url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={symbol}&interval=5min&outputsize=full&apikey={os.getenv('ALPHA_VANTAGE')}"
+        url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={symbol}&interval=5min&outputsize=compact&apikey={os.getenv('ALPHA_VANTAGE')}"
         
         try:
             print(f"[*] Fetching historical payload from Alpha Vantage for {symbol}...")

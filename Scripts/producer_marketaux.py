@@ -2,6 +2,7 @@ import os, time, requests
 from dotenv import load_dotenv
 from confluent_kafka import Producer
 from models import MarketAuxResponse
+from datetime import datetime, timedelta
 
 load_dotenv()
 producer = Producer(
@@ -10,7 +11,8 @@ producer = Producer(
 
 
 def poll():
-    url = f"https://api.marketaux.com/v1/news/all?symbols=GOOGL,MSFT,AMZN,NVDA,CC:BTC,CC:ETH&filter_entities=true&limit=10&api_token={os.getenv('MARKETAUX')}"
+    one_week_ago = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')
+    url = f"https://api.marketaux.com/v1/news/all?symbols=GOOGL,MSFT,AMZN,NVDA,CC:BTC,CC:ETH&published_after={one_week_ago}&filter_entities=true&limit=10&api_token={os.getenv('MARKETAUX')}"
     try:
         res = requests.get(url, timeout=10).json()
 
