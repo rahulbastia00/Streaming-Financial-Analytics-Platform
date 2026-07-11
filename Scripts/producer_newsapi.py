@@ -11,7 +11,7 @@ producer = Producer(
 
 def poll():
     # Expanded search query to target Forex and Crypto topics
-    url = f"https://newsapi.org/v2/everything?q=Google+OR+Microsoft+OR+Amazon+OR+Nvidia+OR+Bitcoin+OR+Forex+OR+EURUSD&language=en&apiKey={os.getenv('NEWSAPI_API_KEY')}"
+    url = f"https://newsapi.org/v2/everything?q=Google+OR+Microsoft+OR+Amazon+OR+Nvidia+OR+Bitcoin+OR+Ethereum+OR+Forex+OR+EURUSD&language=en&apiKey={os.getenv('NEWSAPI')}"
     try:
         res = requests.get(url, timeout=10).json()
 

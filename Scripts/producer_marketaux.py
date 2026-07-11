@@ -10,8 +10,7 @@ producer = Producer(
 
 
 def poll():
-    # Added CC:BTC to capture crypto entity news explicitly
-    url = f"https://api.marketaux.com/v1/news/all?symbols=GOOGL,MSFT,AMZN,NVDA,CC:BTC&filter_entities=true&limit=10&api_token={os.getenv('MARKETAUX')}"
+    url = f"https://api.marketaux.com/v1/news/all?symbols=GOOGL,MSFT,AMZN,NVDA,CC:BTC,CC:ETH&filter_entities=true&limit=10&api_token={os.getenv('MARKETAUX')}"
     try:
         res = requests.get(url, timeout=10).json()
 

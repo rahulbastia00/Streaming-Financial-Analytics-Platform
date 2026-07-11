@@ -6,7 +6,6 @@ from models import FinnhubResponse
 load_dotenv()
 producer = Producer({"bootstrap.servers": os.getenv("KAFKA_BOOTSTRAP_SERVERS")})
 
-
 def on_message(ws, message):
     raw_json = json.loads(message)
     if raw_json.get("type") == "trade":
@@ -21,11 +20,10 @@ def on_message(ws, message):
         except Exception as e:
             print(f"Error: {e}")
 
-
 def on_open(ws):
+    print("[*] Finnhub WebSocket open. Listening for live stock trades...")
     for symbol in ["GOOGL", "MSFT", "AMZN", "NVDA"]:
         ws.send(f'{{"type":"subscribe","symbol":"{symbol}"}}')
-
 
 ws = websocket.WebSocketApp(
     f"wss://ws.finnhub.io?token={os.getenv('FINNHUB')}",
