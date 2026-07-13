@@ -16,7 +16,7 @@ def run_free_historical_backfill():
         
         try:
             print(f"[*] Fetching 100-day daily charts from Alpha Vantage for {symbol}...")
-            res = requests.get(url, timeout=15).    ()
+            res = requests.get(url, timeout=15).json()
             
             # Resilience Check: Catch structural API blocks or limits
             if "Note" in res or "Information" in res or "Error Message" in res:
