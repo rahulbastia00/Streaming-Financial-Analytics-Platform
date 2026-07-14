@@ -28,3 +28,9 @@ select
 
 from 
     raw_source
+
+-- Infrastructure Deduplication Guardrail
+qualify row_number() over (
+    partition by asset_ticker, sequence_id 
+    order by event_timestamp desc
+) = 1
