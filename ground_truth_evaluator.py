@@ -1,8 +1,8 @@
 import os
 import snowflake.connector
-from dotenv import load_dotenv  # Handles the SSH environment scope gap
+from dotenv import load_dotenv
 
-# Explicitly load environment variables from the local .env file
+# Ensure the non-interactive SSH tunnel loads environment keys perfectly
 load_dotenv()
 
 def evaluate_predictions():
@@ -18,7 +18,7 @@ def evaluate_predictions():
     )
     cursor = conn.cursor()
 
-    # 1. Identify closed windows: Find predictions where the target time has passed but actual price is unlogged
+    # 1. Identify closed windows: Predictions awaiting actual validation values
     find_pending_sql = """
         SELECT prediction_id, stock_ticker, target_window, predicted_future_price, predicted_sentiment_score
         FROM fct_model_predictions
@@ -33,13 +33,13 @@ def evaluate_predictions():
     for pred in pending_predictions:
         pred_id, ticker, target_time, predicted_price, sentiment = pred
         
-        # 2. Look up the actual real-time price that landed in your Gold stream table at that exact target window
+        # 2. Schema-Corrected Query Matrix: Using TRADE_PRICE and EVENT_TIMESTAMP
         lookup_actual_sql = """
-            SELECT price 
+            SELECT TRADE_PRICE 
             FROM fct_realtime_market_stream 
-            WHERE stock_ticker = %s 
-              AND abs(timestampdiff(second, trade_timestamp, %s)) <= 10
-            ORDER BY trade_timestamp DESC
+            WHERE STOCK_TICKER = %s 
+              AND abs(timestampdiff(second, EVENT_TIMESTAMP, %s)) <= 10
+            ORDER BY EVENT_TIMESTAMP DESC
             LIMIT 1;
         """
         cursor.execute(lookup_actual_sql, (ticker, target_time))
@@ -48,13 +48,13 @@ def evaluate_predictions():
         if actual_price_record:
             actual_price = float(actual_price_record[0])
             
-            # 3. Calculate Performance Metrics
+            # 3. Compute Real-Time Performance Analytics
             variance = actual_price - float(predicted_price)
             
-            # Determine directional correctness (within 1% margin for testing metrics)
+            # Direct accuracy check (True if prediction lands within a 1% error margin)
             is_correct = abs(variance) / actual_price <= 0.01 
             
-            # 4. Update the feedback record inside Snowflake
+            # 4. Save metrics into your historical target log table
             update_sql = """
                 UPDATE fct_model_predictions
                 SET actual_price = %s,
