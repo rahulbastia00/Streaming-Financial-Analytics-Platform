@@ -26,12 +26,19 @@ with DAG(
         command='cd ~/Streaming-Financial-Analytics-Platform/dbt_analytics && ../venv/bin/dbt run'
     )
 
-    # Task 2: Open secure tunnel to EC2 and trigger Hugging Face ML inference loop
+    # Task 2: Trigger the EC2 node to process your Hugging Face ML inference models
     execute_ml_inference = SSHOperator(
         task_id='execute_ml_inference',
         ssh_conn_id='ec2_compute_node',
         command='cd ~/Streaming-Financial-Analytics-Platform && ./venv/bin/python3 ml_inference_engine.py'
     )
 
-    # Establish the sequential workflow dependency line
-    run_dbt_transformations >> execute_ml_inference
+    # Task 3: NEW! Trigger the ground truth evaluation engine
+    evaluate_ground_truth = SSHOperator(
+        task_id='evaluate_ground_truth',
+        ssh_conn_id='ec2_compute_node',
+        command='cd ~/Streaming-Financial-Analytics-Platform && ./venv/bin/python3 ground_truth_evaluator.py'
+    )
+
+    # The New Linear Execution Pipeline Chain
+    run_dbt_transformations >> execute_ml_inference >> evaluate_ground_truth

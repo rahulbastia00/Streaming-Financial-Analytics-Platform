@@ -1,5 +1,9 @@
 import os
 import snowflake.connector
+from dotenv import load_dotenv  # Handles the SSH environment scope gap
+
+# Explicitly load environment variables from the local .env file
+load_dotenv()
 
 def evaluate_predictions():
     print("--> Connecting to Snowflake Warehouse to evaluate closed prediction windows...")
@@ -47,8 +51,7 @@ def evaluate_predictions():
             # 3. Calculate Performance Metrics
             variance = actual_price - float(predicted_price)
             
-            # Determine directional correctness (Did it correctly guess if the price went up or down?)
-            # Assuming you track historical base price; for simplicity we check if absolute error is within 1%
+            # Determine directional correctness (within 1% margin for testing metrics)
             is_correct = abs(variance) / actual_price <= 0.01 
             
             # 4. Update the feedback record inside Snowflake
